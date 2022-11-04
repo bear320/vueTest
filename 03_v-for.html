@@ -4,13 +4,20 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vue3</title>
+    <title>03 v-for</title>
     <style>
       img {
         height: 200px;
       }
       .productContainer {
         display: flex;
+      }
+      .productContainer > div {
+        margin: 10px;
+        width: 250px;
+      }
+      h2 {
+        margin: 10px;
       }
     </style>
   </head>
@@ -22,7 +29,7 @@
       </div>
       <div class="productContainer">
         <div v-for="(item, index) in product" :key="item.id">
-          <h1>{{item.title}}</h1>
+          <h3>{{item.title}}</h3>
           <img :src="item.image" v-bind:alt="item.title" />
           <p>{{item.price}}元</p>
           <div>
@@ -31,8 +38,8 @@
             <button @click="addCount(index)">+</button>
           </div>
         </div>
-        <p>總計：{{total}}元</p>
       </div>
+      <h2>總計：{{total}}元</h2>
     </div>
 
     <script src="https://unpkg.com/vue@next"></script>
@@ -78,7 +85,6 @@
             this.count.push(0);
           }
 
-          // 下面有問題
           // this.product.map((item) => {
           //   this.count.push({
           //     id: item.id,
@@ -97,33 +103,19 @@
             this.sumTotal();
           },
           sumTotal() {
-            // this.total = this.count * this.price;
             this.total = 0;
             // this.total += this.count[0] * this.product[0]['price'];
             // this.total += this.count[1] * this.product[1]['price'];
-            for (countIndex in this.count) {
-              this.total += this.count[countIndex] * this.product[countIndex]["price"];
+
+            // countIndex → index of the count array
+            for (const countIndex in this.product) {
+              // if (!this.product[countIndex]["price"]) return;
+              this.total += this.count[countIndex] * this.product[countIndex];
             }
-            this.total = parseFloat(this.total);
+            // 取正整數
+            this.total = parseInt(this.total);
+            // 四捨五入至小數點第二位 → 變成字串
             // this.total = this.total.toFixed(2);
-            console.log(this.total);
-
-            // 想法一
-            // this.count.map((item) => {
-            //   // item --> 商品數量
-            //   // index --> 陣列位置
-            //   // this.product[index] --> 商品資訊
-            //   // this.product[index]['price'] --> 商品價格
-            //   console.log(this.product[index]["price"] + ": " + item);
-            // });
-
-            // 想法二
-            // this.product.map((item, index) => {
-            //   // item.price --> 商品價格
-            //   // index --> 商品資訊陣列位置
-            //   // this.count[index] --> 商品數量
-            //   console.log(this.count[index] + ": " + item.price);
-            // });
           },
         },
       }).mount("#app");

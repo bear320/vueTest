@@ -4,17 +4,17 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vue3</title>
+    <title>02 v-model</title>
   </head>
   <body>
     <div id="app">
       <h1 data-mode="dark">{{title}}</h1>
-      <h6>{{price}}元</h6>
+      <h4>價格：{{price}}元</h4>
       <div>
         <!-- <button @click="count -= 1">-</button> -->
+        <!-- <button @click="count += 1">+</button> -->
         <button @click="reduceCount">-</button>
         <input type="number" v-model.number="count" />
-        <!-- <button @click="count += 1">+</button> -->
         <button @click="addCount">+</button>
       </div>
       <button>Add</button>
@@ -25,7 +25,7 @@
       Vue.createApp({
         data() {
           return {
-            title: "我是一個商品",
+            title: "商品名稱",
             price: 100,
             count: 0,
             total: 0,
@@ -33,11 +33,13 @@
         },
         methods: {
           addCount() {
+            // count = count + 1;
             this.count += 1;
             this.sumTotal();
           },
           reduceCount() {
             if (this.count <= 0) return;
+            // count = count - 1;
             this.count -= 1;
             this.sumTotal();
           },

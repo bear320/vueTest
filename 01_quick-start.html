@@ -8,25 +8,27 @@
   </head>
   <body>
     <div id="app">
-      <!-- Template Syntax: double curly brackets -->
+      <!-- Template Syntax: {{ double curly brackets }} -->
       <!-- 作用域 Scope -->
       <h1>{{typeof count}}</h1>
       <hr />
       <p>{{name}}想吃{{food}}</p>
-      <div>{{talk? '愛講話':'吼吼吼'}}</div>
+      <hr />
+      <!-- Boolean? 1: 0 -->
+      <div>{{talk? '愛講話':'靜悄悄'}}</div>
       <div>{{array.length}}</div>
       <div>{{obj}}</div>
     </div>
     <script src="https://unpkg.com/vue@next"></script>
     <script>
-      // console.log(Vue);
+      // 新增一個應用 application → 建立 Vue 實體
       Vue.createApp({
         data() {
           return {
-            count: 1, //number
-            name: "🐻", //string
-            food: "🍔",
-            talk: true, //boolean
+            count: 3, // number
+            name: "🐻", // string
+            food: "🍔", // string
+            talk: false, // boolean
             array: [1, 2, 3], // array
             obj: { test: "123" }, // object
           };
