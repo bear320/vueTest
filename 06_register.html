@@ -24,6 +24,9 @@
         border-radius: 50%;
         background-color: #fff;
       }
+      .head .blackSkin {
+        background-color: #111;
+      }
       .avatar .body {
         position: absolute;
         bottom: -1rem;
@@ -46,12 +49,7 @@
                     background: activeColor? activeColor: '#ddd'
             }"
         >
-          <div
-            class="head"
-            :style="{
-                    left: formHover? '1.5rem': '1rem'
-                }"
-          ></div>
+          <div :class="['head',{blackSkin: formHover}]" :style="{ left: formHover? '1.5rem': '1rem' }"></div>
           <div class="body"></div>
         </div>
         <label for="email">Email</label>
@@ -67,12 +65,22 @@
           {{drink}}
         </div>
         <div>
-          <input type="radio" name="location" id="taipei" v-model="location" checked />
+          <input type="radio" name="location" id="taipei" value="Taipei" v-model="location" />
           <label for="taipei">Taipei</label>
-          <input type="radio" name="location" id="taichung" v-model="location" checked />
+          <input type="radio" name="location" id="taichung" value="Taichung" v-model="location" />
           <label for="taichung">Taichung</label>
           {{location}}
         </div>
+        <!-- <div class="tab">
+          <p v-if="location === 'taipei'">Taiper</p>
+          <p v-else-if="location === 'taichung'">Taichung</p>
+          <p v-else>Confused Nick Young</p>
+        </div> -->
+        <div class="tab" v-if="location === 'taipei'">Taipei</div>
+        <div class="tab" v-else-if="location === 'taichung'">Taichung</div>
+        <div class="tab" v-else>Confused Nick Young</div>
+        <div class="tab" v-show="location === 'taichung'">Show</div>
+        <hr />
         <label for="food">Food</label>
         <select name="food" id="food" v-model="food">
           <option value="" disabled>Please select</option>
