@@ -33,9 +33,9 @@
           <img :src="item.image" v-bind:alt="item.title" />
           <p>{{item.price}}元</p>
           <div>
-            <button @click="reduceCount(index)">-</button>
-            <input type="number" min="0" v-model.number="count[index]" />
-            <button @click="addCount(index)">+</button>
+            <button v-on:click="reduceCount(index)">-</button>
+            <input type="number" min="0" v-model="count[index]" />
+            <button @click="addCount(index, 1)">+</button>
           </div>
         </div>
       </div>
@@ -84,13 +84,6 @@
           for (item in this.product) {
             this.count.push(0);
           }
-
-          // this.product.map((item) => {
-          //   this.count.push({
-          //     id: item.id,
-          //     count: 0,
-          //   });
-          // });
         },
         methods: {
           addCount(index) {
@@ -110,7 +103,7 @@
             // countIndex → index of the count array
             for (const countIndex in this.product) {
               // if (!this.product[countIndex]["price"]) return;
-              this.total += this.count[countIndex] * this.product[countIndex];
+              this.total += this.count[countIndex] * this.product[countIndex]["price"];
             }
             // 取正整數
             this.total = parseInt(this.total);

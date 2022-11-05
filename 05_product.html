@@ -8,7 +8,6 @@
     <style>
       img {
         width: 200px;
-        /* height: 200px; */
       }
       .productContainer {
         display: flex;
@@ -25,16 +24,18 @@
   </head>
   <body>
     <div id="app">
-      <!-- 變數 in 物件/陣列 -->
-      <div class="pagination">
-        <button v-for="page in 10" :key="page">{{page}}</button>
-      </div>
+      <header>
+        Search: <input type="text" v-model="search" />
+        <br />
+        Price between US$ <input id="min" type="number" v-model="min" /> and US$
+        <input id="filter" type="max" v-model="max" />
+      </header>
       <div v-if="load">load</div>
       <div class="productContainer">
         <div class="product-item" v-for="(item, index) in product" :key="item.id">
           <h3>{{item.title}}</h3>
           <img :src="item.image" v-bind:alt="item.title" />
-          <p>{{item.price}}元</p>
+          <p>US$ {{item.price}}</p>
           <div>
             <button @click="reduceCount(index)">-</button>
             <input type="number" min="0" v-model.number="count[index]" />
@@ -51,24 +52,85 @@
         data() {
           return {
             load: false,
-            product: [],
+            source: [],
+            // product: [],
             count: [],
-            total: 0,
+            // total: 0,
+            search: "",
+            min: 0,
+            max: 0,
           };
         },
-        //created --> Vue 實體被建立完
+        // created --> Vue 實體被建立完
         created() {
           this.getResource();
         },
         // mounted --> 渲染完
-        mounted() {},
+        // mounted() {},
+        // computed --> 不能帶參數
+        computed: {
+          product() {
+            // console.log(this.filter);
+
+            let cache = this.source;
+
+            // 篩選最低價格
+            if (this.min > 0) {
+              cache = cache.filter((item) => {
+                return item.price > this.min;
+              });
+            }
+
+            // 篩選最高價格
+            if (this.max > 0) {
+              cache = cache.filter((item) => {
+                return item.price < this.max;
+              });
+            }
+
+            // 篩選相符標題
+            if (this.search !== "") {
+              cache = cache.filter((item) => {
+                return item.title.includes(this.search);
+              });
+            }
+
+            return cache;
+          },
+          total() {
+            if (this.product.length > 0) {
+              let total = 0;
+              for (const countIndex in this.product) {
+                total += this.count[countIndex] * this.product[countIndex]["price"];
+              }
+              return parseInt(total);
+            } else {
+              return 0;
+            }
+          },
+        },
+        // watch --> 監聽 data 或 computed
+        watch: {
+          total: {
+            handler: function (newVal, oldVal) {
+              console.log(oldVal);
+              console.log(newVal);
+              if (newVal > 1000) {
+                alert("You're gonna be broke until payday.");
+              }
+            },
+            // 深度監聽（預設 false） --> 會影響效能，平時可以關閉
+            // deep: true,
+          },
+        },
+        // methods --> 可以帶參數
         methods: {
           getResource() {
             this.load = true;
             fetch("https://fakestoreapi.com/products")
               .then((res) => res.json())
               .then((json) => {
-                this.product = json;
+                this.source = json;
                 for (item in this.product) {
                   this.count.push(0);
                 }
@@ -78,28 +140,21 @@
           },
           addCount(index) {
             this.count[index] += 1;
-            this.sumTotal();
+            // this.sumTotal();
           },
           reduceCount(index) {
             if (this.count[index] <= 0) return;
             this.count[index] -= 1;
-            this.sumTotal();
+            // this.sumTotal();
           },
-          sumTotal() {
-            this.total = 0;
-            // this.total += this.count[0] * this.product[0]['price'];
-            // this.total += this.count[1] * this.product[1]['price'];
-
-            // countIndex → index of the count array
-            for (const countIndex in this.product) {
-              // if (!this.product[countIndex]["price"]) return;
-              this.total += this.count[countIndex] * this.product[countIndex];
-            }
-            // 取正整數
-            this.total = parseInt(this.total);
-            // 四捨五入至小數點第二位 → 變成字串
-            // this.total = this.total.toFixed(2);
-          },
+          // sumTotal() {
+          //   this.total = 0;
+          //   for (const countIndex in this.product) {
+          //     this.total += this.count[countIndex] * this.product[countIndex];
+          //   }
+          //   // 取正整數
+          //   this.total = parseInt(this.total);
+          // },
         },
       }).mount("#app");
     </script>

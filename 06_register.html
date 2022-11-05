@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>06 register</title>
+    <style>
+      .avatar {
+        position: relative;
+        width: 4rem;
+        height: 4rem;
+        background: #111;
+        border-radius: 50%;
+        border: 2px solid #111;
+        overflow: hidden;
+      }
+      .avatar .head {
+        position: absolute;
+        top: 0.5rem;
+        left: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 50%;
+        background-color: #fff;
+      }
+      .avatar .body {
+        position: absolute;
+        bottom: -1rem;
+        left: 0.5rem;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        background-color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <form>
+        <div
+          class="avatar"
+          @mouseover="formHover = true"
+          @mouseleave="formHover = false"
+          :style="{
+                    background: activeColor? activeColor: '#ddd'
+            }"
+        >
+          <div
+            class="head"
+            :style="{
+                    left: formHover? '1.5rem': '1rem'
+                }"
+          ></div>
+          <div class="body"></div>
+        </div>
+        <label for="email">Email</label>
+        <input type="email" id="email" v-model="email" />
+        <br />
+        <label for="name">Name</label>
+        <input type="text" id="name" v-model="name" />
+        <div>
+          <input type="checkbox" id="wine" name="drink" value="wine" v-model="drink" />
+          <label for="wine">Wine</label>
+          <input type="checkbox" id="soju" name="drink" value="soju" v-model="drink" />
+          <label for="soju">Soju</label>
+          {{drink}}
+        </div>
+        <div>
+          <input type="radio" name="location" id="taipei" v-model="location" checked />
+          <label for="taipei">Taipei</label>
+          <input type="radio" name="location" id="taichung" v-model="location" checked />
+          <label for="taichung">Taichung</label>
+          {{location}}
+        </div>
+        <label for="food">Food</label>
+        <select name="food" id="food" v-model="food">
+          <option value="" disabled>Please select</option>
+          <option value="hamburger">🍔</option>
+          <option value="fries">🍟</option>
+        </select>
+        {{food}}
+        <div>
+          <label for="head">Head</label>
+          <input type="color" name="head" id="head" value="#e66465" v-model="activeColor" />
+          {{activeColor}}
+        </div>
+        <div>
+          <label for="start">Start date: </label>
+          <input type="date" name="trip-start" id="start" min="2022-01-01" max="2022-12-31" v-model="date" />
+          {{date}}
+        </div>
+      </form>
+    </div>
+
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+      Vue.createApp({
+        data() {
+          return {
+            formHover: false,
+            email: "",
+            name: "",
+            drink: [],
+            location: "",
+            food: "",
+            activeColor: "",
+            date: "",
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
