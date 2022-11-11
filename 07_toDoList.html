@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-do list</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Tahoma";
+      }
+      input,
+      button {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+      }
+      #app {
+        padding: 20px;
+        background-color: Moccasin;
+        width: 300px;
+        margin: auto;
+      }
+      h1 {
+        text-align: center;
+      }
+      .addArea {
+        display: flex;
+        margin-bottom: 20px;
+      }
+      .addArea input,
+      .addArea button,
+      .functionalBtn {
+        margin: 5px;
+        font-size: 16px;
+        line-height: 32px;
+        outline: none;
+        border: none;
+        border-radius: 5px;
+        padding: 0 10px;
+      }
+      .addArea input {
+        flex-grow: 1;
+      }
+      .addArea button,
+      .functionalBtn {
+        background-color: transparent;
+        border: 2px solid black;
+      }
+      .todoList-wrap,
+      .done-wrap {
+        list-style-type: none;
+        list-style-position: outside;
+        padding-left: 0;
+      }
+      .todoList-wrap span,
+      .done-wrap span {
+        padding: 10px;
+        font-size: 20px;
+        line-height: 30px;
+        font-weight: 700;
+      }
+      .todoList-wrap li,
+      .done-wrap li {
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        line-height: 24px;
+      }
+      .todoList-wrap li input[type="checkbox"],
+      .done-wrap li input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        border: 2px solid black;
+        border-radius: 5px;
+        background-color: transparent;
+        margin-right: 10px;
+      }
+      .todoList-wrap li input[type="checkbox"]:checked,
+      .done-wrap li input[type="checkbox"]:checked {
+        background: url(./images/check-solid.svg);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1>To-do List</h1>
+      <div class="addArea">
+        <input type="text" v-model="todoText" />
+        <button @click="addNewTodo">Add</button>
+      </div>
+      <ul class="todoList-wrap">
+        <span>To-do:</span>
+        <li v-for="(item, index) in list" :key="index">
+          <input type="checkbox" v-model="item.checked" />
+          {{item.name}}
+        </li>
+      </ul>
+      <button @click="allDone" class="functionalBtn">All done</button>
+      <ul class="done-wrap">
+        <span>Done:</span>
+        <li v-for="(item, index) in doneList" :key="index">
+          <input type="checkbox" v-model="item.checked" />
+          {{item.name}}
+        </li>
+      </ul>
+      <button @click="clearAll" class="functionalBtn">Delete All</button>
+      <button @click="clearChecked" class="functionalBtn">Delete Done</button>
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+      Vue.createApp({
+        data() {
+          return {
+            todoText: "",
+            list: [{ checked: false, name: "Test" }],
+          };
+        },
+        computed: {
+          list() {
+            return this.list.filter((item) => item.checked);
+          },
+          doneList() {
+            return this.list.filter((item) => item.checked);
+          },
+        },
+        methods: {
+          addNewTodo() {
+            this.list.push({
+              checked: false,
+              name: this.todoText,
+            });
+            this.todoText = "";
+          },
+          allDone() {
+            this.list = this.list.map((item) => {
+              return { ...item, checked: true };
+            });
+          },
+          clearAll() {
+            this.list = [];
+          },
+          clearChecked() {
+            this.list = this.list.filter((item) => !item.checked);
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

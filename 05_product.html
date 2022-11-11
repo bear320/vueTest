@@ -27,15 +27,15 @@
       <header>
         Search: <input type="text" v-model="search" />
         <br />
-        Price between US$ <input id="min" type="number" v-model="min" /> and US$
-        <input id="filter" type="max" v-model="max" />
+        Price between NT$ <input id="min" type="number" v-model="min" /> and NT$
+        <input id="max" type="number" v-model="max" />
       </header>
-      <div v-if="load">load</div>
-      <div class="productContainer">
+      <div v-if="load">Loading</div>
+      <div v-else class="productContainer">
         <div class="product-item" v-for="(item, index) in product" :key="item.id">
           <h3>{{item.title}}</h3>
-          <img :src="item.image" v-bind:alt="item.title" />
-          <p>US$ {{item.price}}</p>
+          <img :src="item.image" :alt="item.title" />
+          <p>{{parsePrice(item.price)}}</p>
           <div>
             <button @click="reduceCount(index)">-</button>
             <input type="number" min="0" v-model.number="count[index]" />
@@ -43,7 +43,7 @@
           </div>
         </div>
       </div>
-      <h2>總計：{{total}}元</h2>
+      <h2>Total: {{parsePrice(total)}}</h2>
     </div>
 
     <script src="https://unpkg.com/vue@next"></script>
@@ -51,50 +51,40 @@
       Vue.createApp({
         data() {
           return {
-            load: false,
-            source: [],
-            // product: [],
-            count: [],
-            // total: 0,
             search: "",
             min: 0,
             max: 0,
+            load: false,
+            // total: 0,
+            source: [],
+            // product: [],
+            count: [],
           };
-        },
-        // created --> Vue 實體被建立完
-        created() {
-          this.getResource();
         },
         // mounted --> 渲染完
         // mounted() {},
-        // computed --> 不能帶參數
+        // computed --> 不帶參數、有回傳值
         computed: {
           product() {
-            // console.log(this.filter);
-
             let cache = this.source;
-
             // 篩選最低價格
             if (this.min > 0) {
               cache = cache.filter((item) => {
                 return item.price > this.min;
               });
             }
-
             // 篩選最高價格
             if (this.max > 0) {
               cache = cache.filter((item) => {
                 return item.price < this.max;
               });
             }
-
             // 篩選相符標題
             if (this.search !== "") {
               cache = cache.filter((item) => {
                 return item.title.includes(this.search);
               });
             }
-
             return cache;
           },
           total() {
@@ -113,8 +103,6 @@
         watch: {
           total: {
             handler: function (newVal, oldVal) {
-              console.log(oldVal);
-              console.log(newVal);
               if (newVal > 1000) {
                 alert("You're gonna be broke until payday.");
               }
@@ -125,18 +113,21 @@
         },
         // methods --> 可以帶參數
         methods: {
+          parsePrice(price) {
+            return `NT$${parseInt(price * 33)}`;
+          },
           getResource() {
             this.load = true;
             fetch("https://fakestoreapi.com/products")
               .then((res) => res.json())
               .then((json) => {
                 this.source = json;
+                // 初始化商品數量
                 for (item in this.product) {
                   this.count.push(0);
                 }
                 this.load = false;
               });
-            // 初始化商品數量
           },
           addCount(index) {
             this.count[index] += 1;
@@ -155,6 +146,10 @@
           //   // 取正整數
           //   this.total = parseInt(this.total);
           // },
+        },
+        // created --> Vue 實體被建立完
+        created() {
+          this.getResource();
         },
       }).mount("#app");
     </script>
