@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>09 Scroll To</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        font-family: Tahoma;
+      }
+      section {
+        height: 100vh;
+        font-size: 50vh;
+        line-height: 100vh;
+        text-align: center;
+        position: relative;
+      }
+      button {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        display: block;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        cursor: pointer;
+      }
+      section button {
+        position: absolute;
+        font-size: 3rem;
+        bottom: 5vh;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      #app {
+        position: relative;
+      }
+      #section1 {
+        background-color: pink;
+      }
+      #section2 {
+        background-color: bisque;
+      }
+      #section3 {
+        background-color: beige;
+      }
+      .blockBtnBox {
+        position: fixed;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .blockBtnBox button {
+        font-size: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <section id="section1" ref="section1">
+        1
+        <!-- <button @click="scrollDown">👇🏻</button> -->
+        <button @click="scrollBlock(2)">👇🏻</button>
+      </section>
+      <section id="section2" ref="section2">2</section>
+      <section id="section3" ref="section3">
+        3
+        <button @click="scrollUp">👆🏻</button>
+      </section>
+      <div class="blockBtnBox">
+        <button v-for="item in 3" :class="[]" @click="scrollBlock(item)" :key="index">{{item}}</button>
+      </div>
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+      Vue.createApp({
+        data() {
+          return {};
+        },
+        methods: {
+          scrollUp() {
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          },
+          scrollDown() {
+            // const box = document.getElementById('section2')
+            // console.log(this.$refs);
+            const box = this.$refs.section2;
+            // // console.log(box.getBoundingClientRect());
+            window.scrollTo({
+              top: box.offsetTop,
+              behavior: "smooth",
+            });
+          },
+          scrollBlock(block) {
+            const box = this.$refs[`section${block}`];
+            window.scrollTo({
+              top: box.offsetTop,
+              behavior: "smooth",
+            });
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
