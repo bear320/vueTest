@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Vue3</title>
+        <style>
+            #app img {
+                width: 300px;
+                height: 300px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1184px-Vue.js_Logo_2.svg.png"
+                :style="{background: activeColor? activeColor: '#fff'}"
+            />
+            <br />
+            <button v-for="i in 10">更改背景顏色</button>
+        </div>
+        <script src="https://unpkg.com/vue@next"></script>
+        <script>
+            Vue.createApp({
+                data() {
+                    return {
+                        activeColor: "",
+                    };
+                },
+            }).mount("#app");
+        </script>
+    </body>
+</html>
